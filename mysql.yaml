@@ -15,13 +15,13 @@
         state: started 
         enabled: yes 
 
-    - name: connect to mysql server 
+    - name: connect to mysql server
       community.mysql.mysql_info:
         login_user: root
         login_password: "{{ mysql_root_password }}"
-        loging_host: mysql.kamireddy.online
+        login_host: mysql.daws82s.online
       register: mysql_info
-      ignore_cases: true
+      ignore_errors: true
     
     - name: print the output
       ansible.builtin.debug:
