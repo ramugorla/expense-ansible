@@ -3,7 +3,13 @@
   become: yes
   vars:
     mysql_root_password: "ExpenseApp@1"
-  tasks: 
+  tasks:
+
+  - name: install python libraries 
+    ansible.builtin.pip:
+      name: PyMySQL
+      executable: pip3.9 
+      
   - name: installing mysql
     ansible.builtin.package:
       name: mysql-server 
@@ -15,7 +21,7 @@
       enabled: yes
 
   - name: connect to mysql-server 
-    ansible.mysql.mysql_info:
+    community.mysql.mysql_info:
       login_user: root
       login_password: "{{ mysql_root_password }}"
       login_host: mysql.kamireddy.online 
