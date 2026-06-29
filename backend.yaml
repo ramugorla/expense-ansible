@@ -1,12 +1,12 @@
-- name: configuring backend server 
+- name: configure backend server
   hosts: backend
-  become: yes 
+  become: yes
   tasks:
   - name: disable current nodejs
-    ansible.builtin.command: dnf module disable nodejs -y 
-  
-  - name: enable nodejs 20 
-    ansible.builtin.command: dnf module enable nodejs:20 -y 
+    ansible.builtin.command: dnf module disable nodejs -y
+
+  - name: enable nodejs 20
+    ansible.builtin.command: dnf module enable nodejs:20 -y
 
   - name: install nodejs
     ansible.builtin.package:
@@ -16,35 +16,34 @@
     - nodejs
     - mysql
 
-  - name: create Expense user
+  - name: create expense user
     ansible.builtin.user:
       name: expense
 
   - name: create app directory
     ansible.builtin.file:
-      path: /home/ec2-user/app/
+      path: /app
       state: directory
-
+  
   - name: download backend code
     ansible.builtin.get_url:
       url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-      dest: /tmp/backend.zip 
+      dest: /tmp/backend.zip
 
-  - name: unzip the code
+  - name: unzip backend code
     ansible.builtin.unarchive:
       src: /tmp/backend.zip
-      dest: /tmp 
-      remote_src: yes 
-
-  - name: install dependencies
+      dest: /app
+      remote_src: yes
+  
+  - name: Install dependencies
     community.general.npm:
-      path: /home/ec2-user/app/
+      path: /app
 
-  - name: copy the file 
+  - name: copy backend service
     ansible.builtin.copy:
-      src: backend.service 
-      dest: /etc/systemd/system/backend.servive 
-
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
 
   - name: install python libs
     ansible.builtin.pip:
