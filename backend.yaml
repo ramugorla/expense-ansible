@@ -8,10 +8,13 @@
   - name: enable nodejs 20 
     ansible.builtin.command: dnf module enable nodejs:20 -y 
 
-  - name: install nodejs 
+  - name: install nodejs
     ansible.builtin.package:
-      name: nodejs 
-      state: installed
+      name: "{{ item }}"
+      state: present
+    loop:
+    - nodejs
+    - mysql
 
   - name: create Expense user
     ansible.builtin.user:
@@ -41,6 +44,15 @@
     ansible.builtin.copy:
       src: backend.service 
       dest: /etc/systemd/system/backend.servive 
+
+
+  - name: install python libs
+    ansible.builtin.pip:
+      name: "{{ item }}"
+      executable: pip3.9
+    loop:
+    - cryptography
+    - PyMySQL
 
   - name: import mysql data
     community.mysql.mysql_db:
