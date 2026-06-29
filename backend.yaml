@@ -22,7 +22,7 @@
 
   - name: create app directory
     ansible.builtin.file:
-      path: /app
+      path: app
       state: directory
 
   - name: download backend code
@@ -38,7 +38,7 @@
 
   - name: install dependencies
     community.general.npm:
-      path: /app
+      path: app
 
   - name: copy the file 
     ansible.builtin.copy:
